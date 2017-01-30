@@ -98,28 +98,28 @@ areas4b<-areas4b[,area:=NULL]
 is.null(areas4b$area)  #TRUE
 is.null(areas2b$area)  #FALSE
 
-# ne garder que les colonnes de cout, de prix et le cout total de production (ie `OV. COST`) ====
+# ne garder que les colonnes de consommation et d'éolien ====
 
-areas4 <- areas3 %>% select(contains("COST"),contains("PRICE"),`OV. COST`)
+areas4 <- areas3 %>% select(contains("LOAD"),contains("WIND"), `OV. COST`)
 
 areas4b <- areas3b[,
-                   select_vars(names(areas3b),contains("COST"),contains("PRICE"),`OV. COST`),
+                   select_vars(names(areas3b),contains("LOAD"),contains("WIND")),
                    with=FALSE]
 
-# rajouter une colonne qui correspond au ratio de `OV. COST` par PRICE MRG.====
+# rajouter une colonne qui correspond au ratio de `WIND` par LOAD ====
 # Arrondir le resulat a 2 chiffres apres la virgule ====
 
-areas5 <- areas4 %>% mutate(ratio =`OV. COST`/`MRG. PRICE`,
+areas5 <- areas4 %>% mutate(ratio=WIND/LOAD,
                             ratio=round(ratio,2))
                             
 
-areas4b[,ratio := round(`OV. COST`/`MRG. PRICE`,2)]
-areas4b[,ratio := `OV. COST`/`MRG. PRICE`
+areas4b[,ratio := round(WIND/LOAD,2)]
+areas4b[,ratio := WIND/LOAD
         ][,ratio := round(ratio,2)]
 
 
 # changer le nom de la colonne OV. COST par "cout_total ====
-setnames(areas4b,'OV. COST',"cout_total")
+setnames(areas4,'OV. COST',"cout_total")
 
 
 # exporter le resultat en CSV====
@@ -128,21 +128,28 @@ setnames(areas4b,'OV. COST',"cout_total")
 areas %>% 
   filter(area=="a") %>% 
   select(-area) %>% 
-  select(contains("COST"),contains("PRICE"),`OV. COST`) %>% 
-  mutate(ratio =`OV. COST`/`MRG. PRICE`,
+  select(contains("LOAD"),contains("WIND"),`OV. COST`) %>% 
+  mutate(ratio=WIND/LOAD,
         ratio=round(ratio,2)) %>% 
   arrange(ratio) %>%
   rename(cout_total = `OV. COST`) %>% 
   write.csv2(file="out.csv",row.names=FALSE)
 
+browseURL("out.csv")
+
+### Créer un package R contenant cette dernière instruction ==== 
+## documenté (roxygen2) et testé (testhat)
 
 areas[area=="a",
-      select_vars(names(areas),contains("COST"),contains("PRICE"),`OV. COST`),
-      with=FALSE][,ratio := round(`OV. COST`/`MRG. PRICE`,2)][order(ratio)]
-
-
+      select_vars(names(areas),contains("LOAD"),contains("WIND"),`OV. COST`),
+      with=FALSE][,ratio := round(WIND/LOAD,2)][order(ratio)]
 
 browseURL("out.csv")
+
+### Créer un package R contenant cette dernière instruction ==== 
+## documenté (roxygen2) et testé (testhat)
+
+
   
 # changer le nom de la colonne OV. COST par "cout_total ====
 
@@ -162,13 +169,18 @@ browseURL("out.csv")
 areas %>% 
   filter(area=="a") %>% 
   select(-area) %>% 
-  select(contains("COST"),contains("PRICE"),`OV. COST`) %>% 
-  mutate(ratio =`OV. COST`/`MRG. PRICE`,
+  select(contains("LOAD"),contains("WIND"),`OV. COST`) %>% 
+  mutate(ratio =WIND/LOAD,
          ratio=round(ratio,2)) %>% 
   arrange(ratio) %>%
   rename(cout_total = `OV. COST`) %>% 
   write.csv2(file="out.csv",row.names=FALSE)
 
+browseURL("out.csv")
+
 areas
 
+
+### Créer un package R contenant cette dernière instruction ==== 
+## documenté (roxygen2) et testé (testhat)
 

@@ -1,11 +1,15 @@
 library(dplyr)
 library(antaresRead)
-setSimulationPath()
 
+### chargement des données depuis une étude ANTARES==== 
+# Cette étape peut ne pas être présentée
+setSimulationPath()
 areas <- readAntares() # equivalent to readAntares(areas="all")
 links <- readAntares(links="all")
 save(areas,links, file="TD_RTE.Rdata")
 
+
+### chargement des données depuis un Rdata ==== 
 load("TD_RTE.Rdata")
 
 # visualiser la base, en afficher les statistiques descriptives ====
